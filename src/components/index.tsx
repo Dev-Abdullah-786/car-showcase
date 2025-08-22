@@ -3,11 +3,13 @@ import CustomButton from "./CustomButton";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import SearchManufacturer from "./SearchManufacturer";
+import SearchBar from "./SearchBar";
 
 export {
   Hero,
   CustomButton,
   Navbar,
   Footer,
-  SearchManufacturer
+  SearchManufacturer,
+  SearchBar
 };
