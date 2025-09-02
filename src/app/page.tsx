@@ -1,7 +1,22 @@
-import { Hero, SearchBar, CustomFilter } from "@/components";
+import { Hero, SearchBar, CustomFilter, CarCard, ShowMore } from "@/components";
 import { fuels, yearsOfProduction } from "@/constants";
+import { HomeProps } from "@/types";
+import { fetchCars } from "@/utils";
 
-export default function Home() {
+export default async function Home({ searchParams }: HomeProps) {
+  const params = await searchParams;
+
+  const allCars = await fetchCars({
+    manufacturer: params?.manufacturer || "",
+    year: params?.year || 2022,
+    fuel: params?.fuel || "",
+    limit: params?.limit || 10,
+    model: params?.model || "",
+  });
+
+  console.log("🚗 API Data:", allCars);
+
+  const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
   return (
     <main className="overflow-hidden">
       <Hero />
@@ -19,6 +34,25 @@ export default function Home() {
             <CustomFilter title="year" options={yearsOfProduction} />
           </div>
         </div>
+        {!isDataEmpty ? (
+          <section>
+            <div className="home__cars-wrapper">
+              {allCars?.map((car, index) => (
+                <CarCard key={index} car={car} />
+              ))}
+            </div>
+
+            <ShowMore
+              pageNumber={(searchParams.limit || 10) / 10}
+              isNext={(searchParams.limit || 10) > allCars.length}
+            />
+          </section>
+        ) : (
+          <div className="home__error-container">
+            <h2 className="text-black text-xl font-bold">Oops, no results</h2>
+            <p>{allCars?.message}</p>
+          </div>
+        )}
       </div>
     </main>
   );
