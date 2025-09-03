@@ -14,8 +14,6 @@ export default async function Home({ searchParams }: HomeProps) {
     model: params?.model || "",
   });
 
-  console.log("🚗 API Data:", allCars);
-
   const isDataEmpty = !Array.isArray(allCars) || allCars.length < 1 || !allCars;
   return (
     <main className="overflow-hidden">
